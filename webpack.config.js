@@ -2,8 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const EslintPlugin = require("eslint-webpack-plugin");
-const { options } = require("less");
-const { plugin } = require("postcss");
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 // "build": "cross-env NODE_ENV=production webpack"
 const NODE_ENV = process.env.NODE_ENV;
@@ -47,17 +46,47 @@ module.exports = {
     rules: [
       {
         test: /\.txt$/,
-        type: "asset/source"
+        type: "asset/source",
       },
+      // {
+      //   test: /\.png$/,
+      //   type: "asset", // 值🈶asset/line  asset 会输出文件和base64 之间自动选择
+      //   parser: {
+      //     // 如果图片大小小于某个阙值，则base64,大于某个阙值输出单独文件；
+      //     dataUrlCondition: {
+      //       maxSize: 1024 * 32,
+      //     },
+      //   },
+      // },
       {
         test: /\.png$/,
-        type: "asset", // 值🈶asset/line
-        parser: {
-          // 如果图片大小小于某个阙值，则base64,大于某个阙值输出单独文件；
-          dataUrlCondition: {
-            maxSize: 1024,
+        oneOf: [
+          {
+            // resourceQuery 是一个用于匹配请求资源的的URL 中查询字符串中,第一个不匹配下一个对象进行匹配
+            resourceQuery: /sizes/,
+            use: [
+              {
+                loader: "responsive-loader", // 这样配 所有的图片都会是响应式，但场景是指定某张图片需要响应式
+                options: {
+                  // sizes: [300,600, 1024], // 将图片切成三个规格 这里是写法1,这里写了后，在图片路径里就不用再写切片尺寸了
+                  adapter: require("responsive-loader/sharp"),
+                },
+              },
+            ],
           },
-        },
+          {
+            type: 'asset/resource'
+          },
+        ],
+        // use: [
+        //   {
+        //     loader: 'responsive-loader', // 这样配 所有的图片都会是响应式，但场景是指定某张图片需要响应式
+        //     options: {
+        //       sizes: [300,600, 1024], // 将图片切成三个规格 这里是写法1,这里写了后，在图片路径里就不用再写切片尺寸了
+        //       adapter: require('responsive-loader/sharp')
+        //     }
+        //   }
+        // ]
       },
       // {
       //   test: /\.(jpe?g|png|svg|gif)$/i,
@@ -66,7 +95,7 @@ module.exports = {
       //     disable: !isProduction, // 如果是生成环境不需要压缩
       //     mozipeg: {
       //       Progressive:true, // 是否开启渐进式JPEG，可以有效提升JPEG图片的加载速度
-      //       quality: 65 // 压缩JPEG 图片的质量，取之范围为0到100， 值越大质量越好但文件越大 
+      //       quality: 65 // 压缩JPEG 图片的质量，取之范围为0到100， 值越大质量越好但文件越大
       //     },
       //     optipng: {
       //       enabled:true // 是否开启png 图片的优化，可以提升png加载速度
@@ -101,25 +130,26 @@ module.exports = {
       //   }
       // },
       {
-         test: /\.ts$/,
+        test: /\.ts$/,
         //  use: [
         //   'ts-loader' // 缺点：加载慢
         //  ]
-        use: [ // 推荐实践方式， 预设
+        use: [
+          // 推荐实践方式， 预设
           {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: {
               presets: [
-                "@babel/preset-typescript" // 复用，提高性能
+                "@babel/preset-typescript", // 复用，提高性能
               ],
               // 注意 预设和插件可以一起使用， 预设就是麦当劳套餐，插件就是某一件食品，不够吃就单独点餐
               // 单独设置插件
-              "plugins": [
+              plugins: [
                 // 装饰器的插件就需要单独在这里配置
-              ]
-            }
-          }
-        ]
+              ],
+            },
+          },
+        ],
       },
       {
         test: /\.js$/,
@@ -178,9 +208,10 @@ module.exports = {
      * 3、可以让减少CSS和JS 并行加载，提高加载效率，减少加载时间
      * 4.、 可以单独维护CSS，更清晰
      */
-    new  EslintPlugin({
-      extensions: ['.js', '.ts'] // 生效的文件
-    })
+    new EslintPlugin({
+      extensions: [".js", ".ts"], // 生效的文件
+    }),
+    new CleanWebpackPlugin()
   ],
 };
 
@@ -189,5 +220,3 @@ module.exports = {
  * 1: 比如肩头函数，要把它从 ES6 转换ES5 ，需要编写对应的babel插件
  * 2、 为了方便，我们可以把插件进行打包， 称为一个预设preset
  */
-
-

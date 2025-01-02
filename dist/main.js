@@ -1,14 +1,21 @@
 /******/ (function() { // webpackBootstrap
-/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/images/img.png":
-/*!****************************!*\
-  !*** ./src/images/img.png ***!
-  \****************************/
+/***/ "./src/images/img.png?sizes[]=300,sizes[]=600,sizes[]=1024":
+/*!*****************************************************************!*\
+  !*** ./src/images/img.png?sizes[]=300,sizes[]=600,sizes[]=1024 ***!
+  \*****************************************************************/
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "81b89c54a2ad2b126aed.png";
+module.exports = {
+        srcSet: __webpack_require__.p + "8254e5c1ebac436e-300.png"+" 300w"+","+__webpack_require__.p + "2654b6bd007493f7-600.png"+" 600w"+","+__webpack_require__.p + "e6704ae0965ce3bf-1024.png"+" 1024w",
+        images: [{path: __webpack_require__.p + "8254e5c1ebac436e-300.png",width: 300,height: 166},{path: __webpack_require__.p + "2654b6bd007493f7-600.png",width: 600,height: 331},{path: __webpack_require__.p + "e6704ae0965ce3bf-1024.png",width: 1024,height: 565}],
+        src: __webpack_require__.p + "e6704ae0965ce3bf-1024.png",
+        toString: function(){return __webpack_require__.p + "e6704ae0965ce3bf-1024.png"},
+        
+        width: 1024,
+        height: 565
+      }
 
 /***/ })
 
@@ -39,6 +46,30 @@ module.exports = __webpack_require__.p + "81b89c54a2ad2b126aed.png";
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
 /******/ 	/* webpack/runtime/global */
 /******/ 	!function() {
 /******/ 		__webpack_require__.g = (function() {
@@ -49,6 +80,11 @@ module.exports = __webpack_require__.p + "81b89c54a2ad2b126aed.png";
 /******/ 				if (typeof window === 'object') return window;
 /******/ 			}
 /******/ 		})();
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
@@ -87,13 +123,15 @@ module.exports = __webpack_require__.p + "81b89c54a2ad2b126aed.png";
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 !function() {
+"use strict";
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _images_img_png__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./images/img.png */ "./src/images/img.png");
+/* harmony import */ var _images_img_png_sizes_300_sizes_600_sizes_1024__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./images/img.png?sizes[]=300,sizes[]=600,sizes[]=1024 */ "./src/images/img.png?sizes[]=300,sizes[]=600,sizes[]=1024");
+/* harmony import */ var _images_img_png_sizes_300_sizes_600_sizes_1024__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_images_img_png_sizes_300_sizes_600_sizes_1024__WEBPACK_IMPORTED_MODULE_0__);
 // let sum = function (a, b) {
 //     return a + b
 // }
@@ -101,9 +139,10 @@ __webpack_require__.r(__webpack_exports__);
 // import title from './title.txt'
 // console.log(title, 'title')
 
-console.log(_images_img_png__WEBPACK_IMPORTED_MODULE_0__, '------');
+console.log((_images_img_png_sizes_300_sizes_600_sizes_1024__WEBPACK_IMPORTED_MODULE_0___default()), ' bg.srcSet');
 var image = new Image();
-image.src = _images_img_png__WEBPACK_IMPORTED_MODULE_0__;
+image.srcset = (_images_img_png_sizes_300_sizes_600_sizes_1024__WEBPACK_IMPORTED_MODULE_0___default().srcSet);
+image.sizes = "(min-width: 1024) 1024px,100vw";
 document.body.appendChild(image);
 }();
 /******/ })()
