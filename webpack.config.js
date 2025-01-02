@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const EslintPlugin = require("eslint-webpack-plugin");
 const { options } = require("less");
+const { plugin } = require("postcss");
 
 // "build": "cross-env NODE_ENV=production webpack"
 const NODE_ENV = process.env.NODE_ENV;
@@ -10,7 +11,7 @@ const isProduction = NODE_ENV === "production";
 module.exports = {
   mode: "development",
   devtool: false,
-  entry: "./src/index.ts",
+  entry: "./src/index.js",
   // entry: ['./src/index1.js','./src/index2.js']
   // entry: {
   //     main: './src/index1.js'
@@ -44,6 +45,61 @@ module.exports = {
 
   module: {
     rules: [
+      {
+        test: /\.txt$/,
+        type: "asset/source"
+      },
+      {
+        test: /\.png$/,
+        type: "asset", // 值🈶asset/line
+        parser: {
+          // 如果图片大小小于某个阙值，则base64,大于某个阙值输出单独文件；
+          dataUrlCondition: {
+            maxSize: 1024,
+          },
+        },
+      },
+      // {
+      //   test: /\.(jpe?g|png|svg|gif)$/i,
+      //   options: {
+      //     // 是否禁用图片优化和压缩
+      //     disable: !isProduction, // 如果是生成环境不需要压缩
+      //     mozipeg: {
+      //       Progressive:true, // 是否开启渐进式JPEG，可以有效提升JPEG图片的加载速度
+      //       quality: 65 // 压缩JPEG 图片的质量，取之范围为0到100， 值越大质量越好但文件越大 
+      //     },
+      //     optipng: {
+      //       enabled:true // 是否开启png 图片的优化，可以提升png加载速度
+      //     },
+      //     pnpquant: {
+      //       // 压缩png图片的质量范围，取值范围1-1， 值越大质量越好，但文件越大
+      //       // 第一个值表示压缩质量的下限，第二个值表示压缩的上限
+      //       quality: [0.65, 0.9],
+      //       speed: 4 // 压缩PNG的速度，取值范围1-10， 值越大速度越快但质量越低
+      //     },
+      //     svgo: {
+      //       plugin: [ // 压缩svg的插件列表，这里包含removeViewBox，和cleanupIDs两个插件
+      //         { // 用于删除SVG种的viewBox属性
+      //           // viewBox 属性是用来指定svg视口范围，它的值是一个矩形框的坐标和宽高
+      //           removeViewBox: false
+      //         },
+      //         {
+      //           // 用于删除svg中 的无用的ID属性
+      //           cleanupIDs: true
+
+      //         }
+
+      //       ]
+      //     },
+      //     gifsicle: {
+      //       interlaced: true, // 是否开启gif 图片的隔行扫描，可以有效提升GIF图片和加载速度
+
+      //     },
+      //     webp: {
+
+      //     },
+      //   }
+      // },
       {
          test: /\.ts$/,
         //  use: [
@@ -82,16 +138,6 @@ module.exports = {
             },
           },
         ],
-      },
-      {
-        test: /\.png$/,
-        type: "asset", // 值🈶asset/line
-        parser: {
-          // 如果图片大小小于某个阙值，则base64,大于某个阙值输出单独文件；
-          dataUrlCondition: {
-            maxSize: 1024,
-          },
-        },
       },
       {
         test: /\.css$/, // 匹配的条件，一般是一个正则，用来匹配文件的路径
