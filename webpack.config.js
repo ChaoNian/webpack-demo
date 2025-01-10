@@ -40,6 +40,10 @@ module.exports = {
       "src/**/*js",
     ], // 如果不配置watchFiles就监听所有文件
     historyApiFallback: true,
+    // 代理
+    proxy: {
+      '/api': ''
+    }
   },
 
   module: {
