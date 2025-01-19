@@ -3,17 +3,26 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const EslintPlugin = require("eslint-webpack-plugin");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const nodeExternals = require('webpack-node-externals')
+const definPlugin  = require('defin');
+const { webpack } = require("webpack");
 
 // "build": "cross-env NODE_ENV=production webpack"
 const NODE_ENV = process.env.NODE_ENV;
+console.log(NODE_ENV);
+
 const isProduction = NODE_ENV === "production";
 module.exports = {
-  mode: "development",
+  mode: NODE_ENV,
   devtool: false,
-  entry: "./src/index.js",
-  // entry: ['./src/index1.js','./src/index2.js']
+  // entry: () => './src/index.js', // 函数
+  externals: [
+    nodeExternals() // 排除所有的第三方模块，就是把node_modules 里的所有模块全部设置为外部模块
+  ],
+  entry: "./src/index.js", // 字符串
+  // entry: ['./src/index1.js','./src/index2.js'] // 数组
   // entry: {
-  //     main: './src/index1.js'
+  //     main: './src/index1.js' // 对象
   // },
   // entry: {
   //     entry1: './src/index1.js',
@@ -42,8 +51,21 @@ module.exports = {
     historyApiFallback: true,
     // 代理
     proxy: {
-      '/api': ''
-    }
+      '/api': {
+        target: 'http://localhost:3000', // 将api 代理给3000
+        pathRewrite: {'^/api': ''} // 路径重写 /api 重写为空
+      },
+    },
+     // 没有后端服务器， 可以在这种方式来实现返回数据，进行功能联调
+    // onBeforeSetupMiddleware({app}) {
+    //   // app 就是路由
+    //   app.get('/api/users', (req,res) => {
+    //     res.json([
+    //       {id: 1, name: 'bob'}
+    //     ])
+    //   })
+
+    // }
   },
 
   module: {
@@ -215,7 +237,13 @@ module.exports = {
     new EslintPlugin({
       extensions: [".js", ".ts"], // 生效的文件
     }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
+
+    new webpack.DefinePlugin({
+      // 这里设置全局变量，在业务代码可以获取
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    })
+  
   ],
 };
 
